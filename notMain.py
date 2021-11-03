@@ -2,6 +2,7 @@ import scipy.constants as constant
 import scipy.integrate as integrate
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate.quadpack import _RangeFunc
 class ConstParameters:
     kJ = constant.k
     keV = 8.617*1e-5
@@ -29,18 +30,14 @@ class Silicon:
     def equation(self):
         return lambda nu: self.N0Plus(nu) - self.n(nu)
 
-    def f(self, x, nu):
-        expArg = (x - nu)/(self.k * self.T)
-        exp = np.exp(expArg)
-        return 1/(1 + exp)
-
-    def g(self, x):
-        return 4 * np.pi * np.sqrt((2 * self.m)**3)* np.sqrt(x - self.E_c) / (self.h ** 3)
-
     def n(self, nu):
-        return integrate.quad(lambda x: self.f(x, nu) * self.g(x) , self.E_c, 2 * self.E_c)[0]
+        factor = 1 / (2 * np.pi**2) * (2* self.m / self.h**2) **(3/2)
+        return factor  * integrate.quad( lambda x : (x - self.E_c)**(1/2) / (np.exp ((x - nu)/(self.k * self.T)) + 1), self.E_c, np.inf )[0]      
 
     def N0Plus(self, nu):
+        print('diff: ' + str(self.E_g - self.E_d))
+        print('eg: ' + str(self.E_g))
+        print('ed: ' + str(self.E_d))
         expArg = (self.E_g - self.E_d - nu)/(self.T * self.k)
         exp = np.exp(expArg)
         return self.N_d0/(1 + exp)
@@ -54,39 +51,12 @@ def eV2J(x):
 def perSm2M(x):
     return x*1e+6
 
-# 1.12 eV
-E_g = eV2J(1.12)
-# 1.12 eV
-E_d = eV2J(0.5)
-# 10 : 400 K
-T = 10
-# 1.12 eV 
-E_c = eV2J(1.12)
-# 0.36*m0
-m = 0.36 * ConstParameters.m0kg
-# 1e+15 : 1e+22 per sm
-N_d0 = perSm2M(1e+20)
-k = ConstParameters.kJ
-h = ConstParameters.hJ
-
-silic = Silicon(E_g ,E_d, T, E_c, m, N_d0, k, h)
-eq = silic.equation()
-
-xu = np.linspace(0, eV2J(10), 100)
-x = np.linspace(0, 1e-18, 1000)
-
-yf= [silic.f(i, eV2J(1)) for i in x]
-yg = [silic.g(i) for i in x]
-
-yno = [silic.N0Plus(i) for i in xu]
-yn = [silic.n(i) for i in xu]
-
-yeq = [eq(i) for i in xu]
-
-#plt.plot(x,yf)
-#plt.plot(x,yg)
-#plt.plot(xu,yno)
-#plt.plot(xu,yn)
-plt.plot(xu,yeq)
-
-plt.show()
+def findRightSolution(arr, rg):
+    right = 0
+    left = 0
+    for i in range(len(arr)-1, 0, -1):
+        if (arr[i] > 0):
+            right = rg[i + 1]
+            left = rg[i]
+            break
+    return (right + left)/2
