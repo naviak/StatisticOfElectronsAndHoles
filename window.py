@@ -12,19 +12,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_Application()
         self.ui.setupUi(self)
 
-        self.E_g = 1.12
+        self.E_g = 1.12 * ConstParameters.ev_new
         # 1.12 eV
-        self.E_d = 1
+        self.E_d = self.E_g - 0.054 * ConstParameters.ev_new
         # 10 : 400 K
         self.T = 10
         # 1.12 eV
-        self.E_c = 1.12
+        self.E_c = 1.12 * ConstParameters.ev_new
         # 0.36*m0
-        self.m = 0.36 * ConstParameters.m0eV
+        self.m = 0.36 * ConstParameters.m_new
         # 1e+15 : 1e+22 per sm
         self.N_d0 = 1e+15
-        self.k = ConstParameters.keV
-        self.h = ConstParameters.heV
+        self.k = ConstParameters.k_new
+        self.h = ConstParameters.h_new
 
         self.x1 = np.linspace(-30, 30, 200)
         self.silic = Silicon(self.E_g, self.E_d, self.T, self.E_c,
@@ -36,8 +36,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.E_dChanged(1)
         self.plotData()
         self.plotData()
-        self.plotData2()
-        self.plotData2()
+        self.plotData2_n()
+        self.plotData2_n()
         self.ui.Ed_silder.valueChanged.connect(self.E_dChanged)
         self.ui.Nd0_slider.valueChanged.connect(self.N_d0Changed)
         self.line = self.ui.plot2.plot([0, 400], [1.12, 1.12])
@@ -45,11 +45,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def E_dChanged(self, val):
         valf = float(val) / 100
-        self.E_d = valf
+        self.E_d = valf * ConstParameters.ev_new
         self.ui.Ed_lineEdit.clear()
         self.ui.Ed_lineEdit.insert(str(valf))
         self.plotData()
-        self.plotData2()
+        self.plotData2_n()
 
     def N_d0Changed(self, val):
         valf = 1e15 * (10 ** val)
@@ -57,7 +57,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.Nd0_lineEdit.clear()
         self.ui.Nd0_lineEdit.insert(str(f"1e{15 + val}"))
         self.plotData()
-        self.plotData2()
+        self.plotData2_n()
 
     def T_Changed(self, val):
         self.T = val
@@ -87,6 +87,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def plotData2_n(self):
         self.silic = Silicon(self.E_g, self.E_d, self.T, self.E_c,
                              self.m, self.N_d0, self.k, self.h)
-        sol, _, T = self.silic.fndRs(0.1, 400, 100)
+        sol, _, T = self.silic.fndRs(10, 400, 100)
         assert T.shape == sol.shape
-        self.plot2.setData(T, sol)
+        self.plot2.setData(T, sol / ConstParameters.ev_new)

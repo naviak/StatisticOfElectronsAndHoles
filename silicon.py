@@ -14,6 +14,12 @@ class ConstParameters:
     m0kg = constant.electron_mass
     m0eV = 0.511 * 1e+6
 
+    k_new = 1.381 * 1e-16
+    h_new = 6.626 * 1e-27
+    h_bar_new = 1.055 * 1e-27
+    ev_new = 1.602 * 1e-12
+    m_new = 9.109 * 1e-28
+
 
 class Silicon:
     def __init__(self, E_g, E_d, T, E_c, m, N_d0, k, h):
@@ -61,9 +67,9 @@ class Silicon:
     """короче все новые хуйности с T это адаптеры для хуйни с помощбю которой они корни находили """
     """я протестил все работает"""
     def n_new_T(self, nu, T):
-        effective_state_of_density = 2 * ((2 * np.pi * self.m * self.k * T) / self.h ** 2) ** (3 / 2)
+        effective_state_of_density = 2 * ((2 * np.pi * self.m * self.k * T) / (2 * self.h * np.pi) ** 2) ** (3 / 2)
         fd = fdk(k=0.5, phi=(nu - self.E_c) / (self.k * T))
-        return fd * effective_state_of_density * 2 / (np.pi ** (1/2))
+        return fd * effective_state_of_density
 
     def new_equation_T(self, nu, T):
         return self.N0Plus_T(nu, T) - self.n_new_T(nu, T)
