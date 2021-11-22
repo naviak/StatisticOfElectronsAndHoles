@@ -10,6 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pyqtgraph import PlotWidget
+import pyqtgraph as pg
+
 
 class Ui_Application(object):
     def setupUi(self, Application):
@@ -95,19 +97,38 @@ class Ui_Application(object):
         self.horizontalLayout_6.addWidget(self.T_label)
         self.verticalLayout.addLayout(self.horizontalLayout_6)
         self.gridLayout.addLayout(self.verticalLayout, 0, 2, 3, 1)
+        styles = {'color': 'r', 'font-size': '15px', 'font-weight': 'bold'}
+
+        fnt = QtGui.QFont("Times", 10, QtGui.QFont.Bold)
         self.plot1 = PlotWidget(self.centralwidget)
+        palette = QtGui.QPalette()
+        palette.setColor(QtGui.QPalette.Text, QtCore.Qt.red)
+        self.plot1.getAxis("bottom").setTickFont(fnt)
+        self.plot1.getAxis("left").setTickFont(fnt)
         self.plot1.setMinimumSize(QtCore.QSize(200, 200))
         self.plot1.setObjectName("plot1")
         self.gridLayout.addWidget(self.plot1, 0, 0, 1, 2)
+        self.plot1.getAxis("left").enableAutoSIPrefix(False)
+        self.plot1.setLabel('left', 'Concentration', **styles)
+        self.plot1.setLabel('bottom', 'Temperature, K', **styles)
+
         self.plot2 = PlotWidget(self.centralwidget)
         self.plot2.setMinimumSize(QtCore.QSize(200, 200))
         self.plot2.setObjectName("plot2")
+        self.plot2.getAxis("bottom").setTickFont(fnt)
+        self.plot2.getAxis("left").setTickFont(fnt)
+
+        self.plot2.setLabel('left', 'Fermi level, eV', **styles)
+        self.plot2.setLabel('bottom', 'Temperature, K', **styles)
+
         self.gridLayout.addWidget(self.plot2, 2, 0, 1, 1)
         self.gridLayout.setColumnStretch(0, 1)
         Application.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(Application)
         QtCore.QMetaObject.connectSlotsByName(Application)
+        self.plot1.setBackground('w')
+        self.plot2.setBackground('w')
 
     def retranslateUi(self, Application):
         _translate = QtCore.QCoreApplication.translate
