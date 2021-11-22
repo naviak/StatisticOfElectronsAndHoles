@@ -35,13 +35,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.line = self.ui.plot2.plot([0, 400], [1.12, 1.12], pen=pg.mkPen(color='r', width=2))
 
         self.E_dChanged(1)
+        self.N_d0Changed(0)
         self.plotData()
         self.plotData()
         self.plotData2_n()
         self.plotData2_n()
         self.ui.Ed_silder.valueChanged.connect(self.E_dChanged)
         self.ui.Nd0_slider.valueChanged.connect(self.N_d0Changed)
-        self.ui.T_slider.valueChanged.connect(self.T_Changed)
+
 
         self.sols = []
         self.T_range = []
@@ -50,7 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
         valf = float(val) / 100
         self.E_d = valf * ConstParameters.ev_new
         self.ui.Ed_lineEdit.clear()
-        self.ui.Ed_lineEdit.insert(str(valf))
+        self.ui.Ed_lineEdit.insert(str(valf) + ', eV')
         self.plotData2_n()
         self.plotData()
 
@@ -62,11 +63,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.plotData2_n()
         self.plotData()
 
-    def T_Changed(self, val):
-        self.T = val
-        self.ui.T1_lineEdit.clear()
-        self.ui.T1_lineEdit.insert(str(val))
-        self.plotData()
 
     def plotData(self):
         self.silic = Silicon(self.E_g, self.E_d, self.T, self.E_c,
