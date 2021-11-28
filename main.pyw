@@ -1,9 +1,9 @@
 import sys
 from PyQt5.QtWidgets import QApplication
 from window import MainWindow
-import qtmodern.styles
-import qtmodern.windows
+import warnings
 if __name__ == '__main__':
+    warnings.filterwarnings("ignore")
     app = QApplication(sys.argv)
     wind = MainWindow()
     wind.show()

@@ -1,9 +1,7 @@
-import math
-
 from ui import *
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 import numpy as np
-from silicon import ConstParameters, Silicon, J2eV, eV2J, perSm2M, findRightSolution
+from silicon import ConstParameters, Silicon, findRightSolution
 import pyqtgraph as pg
 
 
@@ -43,7 +41,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.Ed_silder.valueChanged.connect(self.E_dChanged)
         self.ui.Nd0_slider.valueChanged.connect(self.N_d0Changed)
 
-
         self.sols = []
         self.T_range = []
 
@@ -62,7 +59,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.Nd0_lineEdit.insert(str(f"1e{15 + val}"))
         self.plotData2_n()
         self.plotData()
-
 
     def plotData(self):
         self.silic = Silicon(self.E_g, self.E_d, self.T, self.E_c,
