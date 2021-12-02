@@ -64,8 +64,6 @@ class Silicon:
         exp = np.exp(expArg)
         res = self.N_d0 / (1 + exp)
         return res
-    """короче все новые хуйности с T это адаптеры для хуйни с помощбю которой они корни находили """
-    """я протестил все работает"""
     def n_new_T(self, nu, T):
         effective_state_of_density = 2 * ((2 * np.pi * self.m * self.k * T) / (2 * self.h * np.pi) ** 2) ** (3 / 2)
         fd = fdk(k=0.5, phi=(nu - self.E_c) / (self.k * T))

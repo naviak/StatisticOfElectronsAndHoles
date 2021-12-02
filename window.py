@@ -31,9 +31,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.plot = self.ui.plot1.plot(pen=pg.mkPen(color='g', width=2))
         self.plot2 = self.ui.plot2.plot(pen=pg.mkPen(color='g', width=2))
         self.line = self.ui.plot2.plot([0, 400], [1.12, 1.12], pen=pg.mkPen(color='r', width=2))
-
-        self.E_dChanged(1)
-        self.N_d0Changed(0)
+        self.E_dChanged(0)
+        self.N_d0Changed(1)
         self.plotData()
         self.plotData()
         self.plotData2_n()
@@ -63,14 +62,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def plotData(self):
         self.silic = Silicon(self.E_g, self.E_d, self.T, self.E_c,
                              self.m, self.N_d0, self.k, self.h)
-        # y1 = [self.silic.new_equation()(i) for i in self.x1]
-        # y2 = [ self.silic.n(i) for i in self.x1]
         y1 = [Silicon(self.E_g, self.E_d, self.T_range[i], self.E_c,
                       self.m, self.N_d0, self.k, self.h).N0Plus(self.sols[i]) for i in range(len(self.T_range))]
-
+        self.ui.plot1.setYRange(self.silic.N_d0 / 10, self.silic.N_d0 * 5)
         self.plot.setData(self.T_range, y1)
-        # self.plot.setData(self.x1, y2)
-        # self.plot.setData(self.x1, y3)
 
     def plotData2(self):
         T1 = np.linspace(0, 400, 300)

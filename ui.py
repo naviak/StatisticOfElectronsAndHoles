@@ -101,7 +101,7 @@ class Ui_Application(object):
 
         self.plot1 = PlotWidget(self.centralwidget)
 
-        fnt = QtGui.QFont("Times", 10, QtGui.QFont.Bold)
+        fnt = QtGui.QFont("Times", 9, QtGui.QFont.Bold)
         self.plot1.getAxis("bottom").setTickFont(fnt)
         self.plot1.getAxis("left").setTickFont(fnt)
         self.plot1.setMinimumSize(QtCore.QSize(200, 200))
@@ -147,4 +147,3 @@ class Ui_Application(object):
         self.Ed_label.setText(_translate("Application", "E_d"))
         self.Nd0_label.setText(_translate("Application", "N_d0"))
         self.menuMenu.setTitle(_translate("Application", "Меню"))
-

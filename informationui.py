@@ -42,7 +42,7 @@ class Ui_Information(object):
         Information.setWindowTitle(_translate("Information", "О создателях"))
         self.OkButton.setText(_translate("Information", "Закрыть"))
         self.th.setText(_translate("Information", "Программа написана двумя студентами АФТИ НГУ 2021\n"
-                                                         "\n"
-                                                         "Контакты:\n"
-                                                         "Дударь Максим: m.dudar@g.nsu.ru\n"
-                                                         "Пищев Иван: i.pishchev@g.nsu.ru"))
+                                                  "\n"
+                                                  "Контакты:\n"
+                                                  "Дударь Максим: m.dudar@g.nsu.ru\n"
+                                                  "Пищев Иван: i.pishchev@g.nsu.ru"))
