@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets
 import numpy as np
 from silicon import ConstParameters, Silicon, findRightSolution
 import pyqtgraph as pg
-
+from decimal import Decimal
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
@@ -32,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.plot2 = self.ui.plot2.plot(pen=pg.mkPen(color='g', width=2))
         self.line = self.ui.plot2.plot([0, 400], [1.12, 1.12], pen=pg.mkPen(color='r', width=2))
         self.E_dChanged(0)
-        self.N_d0Changed(1)
+        self.N_d0Changed(1500)
         self.plotData()
         self.plotData()
         self.plotData2_n()
@@ -52,10 +52,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.plotData()
 
     def N_d0Changed(self, val):
-        valf = 1e15 * (10 ** val)
+        valf = val / 100
+        valf = 10 ** valf
         self.N_d0 = valf
         self.ui.Nd0_lineEdit.clear()
-        self.ui.Nd0_lineEdit.insert(str(f"1e{15 + val}"))
+        self.ui.Nd0_lineEdit.insert(f"{Decimal(valf):.2E}")
         self.plotData2_n()
         self.plotData()
 
